@@ -4,17 +4,17 @@ from .models import *
 
 @admin.register(Registration)
 class RegistrationAdmin(admin.ModelAdmin):
-    list_display =['id','primary_country']
+    list_display =['username','id','primary_country']
 
 @admin.register(Business)
 class BusinessAdmin(admin.ModelAdmin):
-    list_display =['id','occupation']
+    list_display =['username','id','occupation']
 
 @admin.register(Admission)
 class AdmissionAdmin(admin.ModelAdmin):
-    list_display =['id','school']
+    list_display =['id','username']
 
-@admin.register(reference)
+@admin.register(Admissionreference)
 class referenceAdmin(admin.ModelAdmin):
     list_display =['id','refernces']
 
