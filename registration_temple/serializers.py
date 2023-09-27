@@ -6,6 +6,7 @@ class RegistrationSerializers(serializers.ModelSerializer):
     class Meta:
         model = Registration
         exclude = ['password', 'username']
+       
 
 class RegistrationUpdateSerializers(serializers.ModelSerializer):
     class Meta:
@@ -25,21 +26,33 @@ class BusinessSerializers(serializers.ModelSerializer):
 
 
 class AdmissionSerializers(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField()
     class Meta:
         model = Admission
-        fields = '__all__'
+        fields = ['id','username','standard','ssc_gr_no','hostel','hr_no','hsc_year','ssc_year']
+
+    def get_username(self,obj):
+        return obj.username.username
 
 
 class AdmissionreferenceSerializers(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField()
     class Meta:
         model = Admissionreference
-        fields = '__all__'
+        fields = ['id','username','Hear','refernces','category','skills','branch','member','sabha']
+
+    def get_username(self,obj):
+        return obj.username.username
 
 
 class RelationSerializers(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField()
     class Meta:
         model = Relation
-        fields = '__all__'
+        fields = ['id','username','relations','relative_name','share_phone_number']
+
+    def get_username(self,obj):
+        return obj.username.username
 
 
 class DocumentSerializers(serializers.ModelSerializer):
@@ -50,4 +63,11 @@ class DocumentSerializers(serializers.ModelSerializer):
 
     def get_username(self,obj):
         return obj.username.username
+    
+class EmailWorkSerializers(serializers.ModelSerializer):
+
+    class Meta:
+        model = EmailCheckModel
+        fields = '__all__'
+
 

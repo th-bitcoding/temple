@@ -25,3 +25,7 @@ class DocumentAdmin(admin.ModelAdmin):
 @admin.register(Relation)
 class RelationAdmin(admin.ModelAdmin):
     list_display =['id','relations']
+
+@admin.register(EmailCheckModel)
+class RelationAdmin(admin.ModelAdmin):
+    list_display =['id','name','DOB']

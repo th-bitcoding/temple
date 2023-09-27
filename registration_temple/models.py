@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from base.models import *
+from django.core.validators import RegexValidator,MaxValueValidator, MinValueValidator
 # Create your models here.
 class Registration(AbstractUser,MyModel):
 
@@ -9,15 +10,21 @@ class Registration(AbstractUser,MyModel):
         ('Female','Female')
     )
 
-    primary_country = models.CharField(max_length=255, blank=True, null=True)
-    primary_phone = models.CharField(max_length=255, blank=True, null=True)
+    primary_country = models.CharField(max_length=50, null=True)
+    primary_phone = models.CharField(
+        max_length=10,  # Adjust the max length as needed to accommodate your phone numbers
+        validators=[RegexValidator(r'^\d{10}$', 'Number must be 10 digits', 'Invalid number')],null=True
+    )
     secondary_country = models.CharField(max_length=255, blank=True, null=True)
-    secondary_phone = models.CharField(max_length=255, blank=True, null=True)
+    secondary_phone = models.CharField(max_length=10, null=True,validators=[RegexValidator(r'^\d{10}$','Number must be 10 digits','invalid number')])
     other_country = models.CharField(max_length=255, blank=True, null=True)
-    other_phone = models.CharField(max_length=255, blank=True, null=True)
+    other_phone = models.CharField(max_length=10,blank=True,null=True,validators=[RegexValidator(r'^\d{10}$','Number must be 10 digits','invalid number')])
     email = models.EmailField(unique=True)
     secondary_email = models.EmailField(unique=True)
+
+    first_name = models.CharField(max_length=100,null=True)
     middle_name = models.CharField(max_length=255, blank=True, null=True)
+    last_name = models.CharField(max_length=100,null=True)
     grand_father_name = models.CharField(max_length=255, blank=True, null=True)
     gender = models.CharField(max_length=6,choices=gender_choices)
     marriage_date = models.DateField(blank=True, null=True)
@@ -38,21 +45,21 @@ class Business(models.Model):
         ('office','office')
     )
     username = models.ForeignKey(Registration,on_delete=models.CASCADE, default=None)
-    occupation = models.CharField(max_length=255, blank=True, null=True)
+    occupation = models.CharField(max_length=255, null=True)
     occupation_type = models.CharField(max_length=9,choices=occupation_chices)
     education = models.CharField(max_length=255,blank=True, null=True)
     address_share_with = models.CharField(max_length=255,blank=True, null=True)
     share_phone_number = models.CharField(max_length=13,blank=True, null=True)
     address_type = models.CharField(max_length=6,choices=address_type_choices)
-    address_1 = models.CharField(max_length=60, blank=True, null=True)
+    address_1 = models.CharField(max_length=60, null=True)
     address_2 = models.CharField(max_length=60, blank=True, null=True)
     address_3 = models.CharField(max_length=60, blank=True, null=True)
-    country = models.CharField(max_length=50, blank=True, null=True)
-    state = models.CharField(max_length=50, blank=True, null=True)
-    district = models.CharField(max_length=50, blank=True, null=True)
-    taluka = models.CharField(max_length=50, blank=True, null=True)
-    city_or_village = models.CharField(max_length=50, blank=True, null=True)
-    zip_code =models.IntegerField(blank=True, null=True)
+    country = models.CharField(max_length=50, null=True)
+    state = models.CharField(max_length=50, null=True)
+    district = models.CharField(max_length=50, null=True)
+    taluka = models.CharField(max_length=50, null=True)
+    city_or_village = models.CharField(max_length=50, null=True)
+    zip_code =models.CharField(max_length=6, null=True,validators=[RegexValidator(r'^\d{6}$','Number must be 6 digits','invalid input')])
 
     def __str__(self):
         return self.username.username if self.username.username else ""
@@ -131,13 +138,13 @@ class Relation(models.Model):
     )
     username = models.ForeignKey(Registration,on_delete=models.CASCADE,default=None)
     relations = models.CharField(max_length=10,choices=relation_choices)
-    relative_name = models.CharField(max_length=50,blank=True, null=True)
-    share_phone_number = models.CharField(max_length=13,blank=True,null=True)
+    relative_name = models.CharField(max_length=50, null=True)
+    share_phone_number = models.CharField(max_length=10,null=True,validators=[RegexValidator(r'^\d{10}$','Phone Number must be 10 digits','invalid input')])
 
     def __str__(self):
         return self.relations
     
-    
+
 class Document(models.Model):
     document_choices = (
         ('Adhar','Adhar'),
@@ -173,6 +180,14 @@ class Document(models.Model):
 
     def __str__(self):
         return self.username.username
+    
+
+class EmailCheckModel(models.Model):
+    name = models.CharField(max_length=50,null=True,blank=True)
+    DOB = models.DateField(default=None,null=True,blank=True)
+    email = models.EmailField(unique=True,null=True,blank=True)
+    def __str__(self):
+        return self.name if self.name else ""
 
 
 

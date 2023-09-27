@@ -16,6 +16,8 @@ urlpatterns = [
     path('relation/<int:pk>/',views.RelationApi.as_view(),name='relation'),
     path('documents/',views.DocumentApi.as_view(),name='documents'),
     path('documents/<int:pk>/',views.DocumentApi.as_view(),name='documents'),
+    path('email/',views.EmailWork.as_view(),name='email'),
+
    
 
 ]
