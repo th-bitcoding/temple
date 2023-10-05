@@ -1,6 +1,7 @@
 
 from django.urls import path,include
 from .import views
+app_name='registration'
 urlpatterns = [
 
     path('',views.index,name='index'),
@@ -16,8 +17,10 @@ urlpatterns = [
     path('relation/<int:pk>/',views.RelationApi.as_view(),name='relation'),
     path('documents/',views.DocumentApi.as_view(),name='documents'),
     path('documents/<int:pk>/',views.DocumentApi.as_view(),name='documents'),
-    path('email/',views.EmailWork.as_view(),name='email'),
+    # path('email/',views.EmailWork.as_view(),name='email'),
+    path('sorting/',views.SortingData.as_view(),name='sorting'),
 
-   
+    path('registrationclass/',views.RegistationCreate.as_view(),name='registrationclass')
+
 
 ]

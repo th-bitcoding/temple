@@ -64,10 +64,6 @@ class DocumentSerializers(serializers.ModelSerializer):
     def get_username(self,obj):
         return obj.username.username
     
-class EmailWorkSerializers(serializers.ModelSerializer):
 
-    class Meta:
-        model = EmailCheckModel
-        fields = '__all__'
 
 

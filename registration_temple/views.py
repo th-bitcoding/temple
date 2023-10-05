@@ -1,6 +1,7 @@
 import datetime
 import random
 import string
+from django.forms.models import BaseModelForm
 from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework.response import Response
@@ -12,9 +13,126 @@ from rest_framework.exceptions import APIException
 from django.conf import settings
 from django.core.mail import send_mail
 from django.http import Http404
-# Create your views here.
+from django.views.generic import CreateView
+from .forms import *
+from django.urls import reverse_lazy
+from django.contrib import messages
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.permissions import AllowAny
+
+
 def index(request):
-    return HttpResponse('hello django')
+    return render(request,'registration.html')
+
+class RegistationCreate(CreateView):
+    permission_classes = (AllowAny,)
+    model = Registration
+    form_class = RegistrationForm
+    template_name = 'registration.html'
+    success_url =reverse_lazy('registration:registrationclass')
+
+    def form_valid(self, form):
+        today_date = datetime.date.today()
+        get_primary_phone = form.cleaned_data['primary_phone']
+        get_secondary_country = form.cleaned_data['secondary_country']
+        get_secondary_phone = form.cleaned_data['secondary_phone']
+        get_other_country = form.cleaned_data['other_country']
+        get_other_phone = form.cleaned_data['other_phone']
+        get_DOB = form.cleaned_data['DOB']
+
+        get_marriage_date = form.cleaned_data['marriage_date']
+        get_first_name = form.cleaned_data['first_name']
+        get_middle_name = form.cleaned_data['middle_name']
+        get_last_name = form.cleaned_data['last_name']
+        get_grand_father_name = form.cleaned_data['grand_father_name']
+
+        get_email = form.cleaned_data['email']
+        get_secondary_email = form.cleaned_data['secondary_email']
+
+        check_email = Registration.objects.filter(email=get_email).exists()
+        check_secondary_email = Registration.objects.filter(email=get_secondary_email).exists()
+
+        if get_secondary_country and not get_secondary_phone:
+            messages.warning(self.request, "Enter Secondary Phone Number")
+            form.add_error('secondary_phone', 'Enter Secondary Phone Number.') 
+            return self.render_to_response(self.get_context_data(form=form))
+        
+        if get_secondary_phone and not get_secondary_country:
+            messages.warning(self.request, "Please select Seconday Country")
+            form.add_error('secondary_country', 'Please select Seconday Country.') 
+            return self.render_to_response(self.get_context_data(form=form))
+        
+        if get_other_country and not get_other_phone:
+            messages.warning(self.request, "Enter Other Phone Number")
+            form.add_error('other_phone', 'Enter Other Phone Number.') 
+            return self.render_to_response(self.get_context_data(form=form))
+        
+        
+        if get_other_phone and not get_other_country:
+            messages.warning(self.request, "Please select Other Country")
+            form.add_error('other_country', 'Please select Other Country.') 
+            return self.render_to_response(self.get_context_data(form=form))
+
+
+        if get_marriage_date == today_date:
+            messages.warning(self.request, "select Valid Date.")
+            form.add_error('marriage_date', 'Select Valid Date.') 
+            return self.render_to_response(self.get_context_data(form=form))
+        
+        if get_DOB and get_marriage_date:
+    # Calculate the age difference in days
+            age_difference = (get_DOB - get_marriage_date).days
+        
+            if age_difference < 3650:  # 3650 days are roughly equivalent to 10 years
+                messages.warning(self.request, "Select a Valid Date.")
+                form.add_error('marriage_date', 'Select a Valid Date.') 
+                return self.render_to_response(self.get_context_data(form=form))
+
+        
+        
+        if get_first_name:
+            for data in get_first_name:
+                if not data.isalpha():
+                    messages.warning(self.request, "Only alphabetic characters are allowed in the first name.")
+                    form.add_error('first_name', 'Only alphabets allowed')
+                    return self.render_to_response(self.get_context_data(form=form))
+                
+        if get_middle_name:
+            for data in get_middle_name:
+                if not data.isalpha():
+                    messages.warning(self.request, "Only alphabetic characters are allowed in the middle name.")
+                    form.add_error('middle_name', 'Only alphabets allowed')
+                    return self.render_to_response(self.get_context_data(form=form))
+                
+        if get_last_name:
+            for data in get_last_name:
+                if not data.isalpha():
+                    messages.warning(self.request, "Only alphabetic characters are allowed in the last name.")
+                    form.add_error('last_name', 'Only alphabets allowed')
+                    return self.render_to_response(self.get_context_data(form=form))
+                
+        if get_grand_father_name:
+            for data in get_grand_father_name:
+                if not data.isalpha():
+                    messages.warning(self.request, "Only alphabetic characters are allowed in the Grand Father Name.")
+                    form.add_error('grand_father_name', 'Only alphabets allowed')
+                    return self.render_to_response(self.get_context_data(form=form))
+
+
+        if check_email:
+            messages.warning(self.request, "Email already exists.")
+            form.add_error('email', 'Email already exists.') 
+            return self.render_to_response(self.get_context_data(form=form))
+        
+        if check_secondary_email:
+            messages.warning(self.request, "Email already exists.")
+            form.add_error('secondary_email', 'Email already exists.') 
+            return self.render_to_response(self.get_context_data(form=form))
+        
+        messages.success(self.request, "Data has been successfully inserted.")
+        return super().form_valid(form)
+
 
 def username_check(request):
     username = request.data.get('username')
@@ -287,23 +405,54 @@ class DocumentApi(APIView):
         return Response({'message':'Delete Successfully'},status=status.HTTP_204_NO_CONTENT)
     
 
-class EmailWork(APIView):
+class BirthdayEmail(APIView):
     def get_queryset(self):
-        return EmailCheckModel.objects.all()
+        return Registration.objects.all()
+    
+    def get(self, request, *args, **kwargs):
+        current_date = datetime.date.today()
+
+        checks = Registration.objects.filter(DOB=current_date)
+
+        for check in checks:
+            name = check.first_name
+            email = check.email
+            subject = 'Birthday Wish'
+            message = f'Happy Birthday, {name}! Have a Great Day.'
+            from_email = settings.EMAIL_HOST_USER 
+            recipient_list = [email]
+            send_mail(subject, message, from_email, recipient_list)
+        
+        queryset = self.get_queryset()
+        serializers = Registration(queryset)
+        return Response(serializers)
+    
+
+    
+
+class SortingData(APIView):
+
+    def get_queryset(self):
+        return Business.objects.all()
     
     def get(self,request,*args,**kwargs):
-        current_date=datetime.date.today()
-        check = EmailCheckModel.objects.get(DOB =current_date)
-        name = check.name
-        email = check.email
-        subject = 'Birthday Wish'
-        message = f'Happy Birthday :{name} Have a Great Day'
-        from_email = settings.EMAIL_HOST_PASSWORD
-        recipient_list = [email]
-        send_mail(subject,message,from_email,recipient_list)
-        queryset = self.get_queryset()
-        serializers = EmailWorkSerializers(queryset,many=True)
-        return Response(serializers.data)
+       
+        city = request.query_params.get("city")
+        city_data = Business.objects.filter(city_or_village=city)
+        for data in city_data:
+            Response_data={
+                'username':data.username.username,
+                'occupation':data.occupation,
+                'education':data.education,
+                'country':data.country,
+                'city':data.city_or_village
+            }
+            return Response(Response_data)
+
+    
+
+    
+
     
 
 

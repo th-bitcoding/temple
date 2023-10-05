@@ -2,36 +2,52 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from base.models import *
 from django.core.validators import RegexValidator,MaxValueValidator, MinValueValidator
+from django_countries.fields import CountryField
 # Create your models here.
 class Registration(AbstractUser,MyModel):
+    
 
     gender_choices = (
+        ("", "Gender"), 
         ('Male','Male'),
         ('Female','Female')
     )
-
-    primary_country = models.CharField(max_length=50, null=True)
-    primary_phone = models.CharField(
-        max_length=10,  # Adjust the max length as needed to accommodate your phone numbers
-        validators=[RegexValidator(r'^\d{10}$', 'Number must be 10 digits', 'Invalid number')],null=True
+    blood_group_choice=(
+        ("", "Blood Group"), 
+        ('A+','A+'),
+        ('A-','A-'),
+        ('B+','B+'),
+        ('B-','B-'),
+        ('AB+','AB+'),
+        ('AB-','AB-'),
+        ('O+','O+'),
+        ('O-','O-'),
     )
-    secondary_country = models.CharField(max_length=255, blank=True, null=True)
-    secondary_phone = models.CharField(max_length=10, null=True,validators=[RegexValidator(r'^\d{10}$','Number must be 10 digits','invalid number')])
-    other_country = models.CharField(max_length=255, blank=True, null=True)
-    other_phone = models.CharField(max_length=10,blank=True,null=True,validators=[RegexValidator(r'^\d{10}$','Number must be 10 digits','invalid number')])
+    username = models.CharField(
+        max_length=150,
+        unique=True,
+        blank=True,  # Allow an empty value for the username
+        null=True    # Allow the username to be set to None (null)
+    )
+    primary_country = CountryField(blank_label="select country")
+    primary_phone =models.CharField(max_length=11, null=True,validators=[RegexValidator(r'^\d{10,11}$','Number must be 10 or 11 digits','invalid number')],unique=True)
+    secondary_country = CountryField(blank_label="select country",blank=True,null=True,)
+    secondary_phone = models.CharField(max_length=11, blank=True,null=True,validators=[RegexValidator(r'^\d{10,11}$','Number must be 10 or 11 digits','invalid number')],unique=True)
+    other_country = CountryField(blank_label="select country",blank=True,null=True,)
+    other_phone = models.CharField(max_length=11,blank=True,null=True,validators=[RegexValidator(r'^\d{10,11}$','Number must be 10 or 11 digits','invalid number')],unique=True)
     email = models.EmailField(unique=True)
     secondary_email = models.EmailField(unique=True)
-
+    DOB = models.DateField(default=None,null=True)
     first_name = models.CharField(max_length=100,null=True)
-    middle_name = models.CharField(max_length=255, blank=True, null=True)
+    middle_name = models.CharField(max_length=255,null=True)
     last_name = models.CharField(max_length=100,null=True)
-    grand_father_name = models.CharField(max_length=255, blank=True, null=True)
-    gender = models.CharField(max_length=6,choices=gender_choices)
+    grand_father_name = models.CharField(max_length=255, null=True)
+    gender = models.CharField(max_length=6,choices=gender_choices, null=True)
     marriage_date = models.DateField(blank=True, null=True)
-    blood_group = models.CharField(max_length=3, blank=True, null=True)
+    blood_group = models.CharField(max_length=3, choices=blood_group_choice,null=True)
 
     def __str__(self):
-        return self.username
+        return self.first_name
     
 
 class Business(models.Model):
@@ -182,12 +198,7 @@ class Document(models.Model):
         return self.username.username
     
 
-class EmailCheckModel(models.Model):
-    name = models.CharField(max_length=50,null=True,blank=True)
-    DOB = models.DateField(default=None,null=True,blank=True)
-    email = models.EmailField(unique=True,null=True,blank=True)
-    def __str__(self):
-        return self.name if self.name else ""
+
 
 
 

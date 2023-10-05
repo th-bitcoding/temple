@@ -4,7 +4,7 @@ from .models import *
 
 @admin.register(Registration)
 class RegistrationAdmin(admin.ModelAdmin):
-    list_display =['username','id','primary_country']
+    list_display =['id','first_name','email','primary_country']
 
 @admin.register(Business)
 class BusinessAdmin(admin.ModelAdmin):
@@ -26,6 +26,5 @@ class DocumentAdmin(admin.ModelAdmin):
 class RelationAdmin(admin.ModelAdmin):
     list_display =['id','relations']
 
-@admin.register(EmailCheckModel)
-class RelationAdmin(admin.ModelAdmin):
-    list_display =['id','name','DOB']
+
+

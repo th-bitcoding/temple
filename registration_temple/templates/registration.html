@@ -1,0 +1,326 @@
+{% load static %}
+{% load crispy_forms_tags %} 
+<html>
+    <head>
+        <meta charset="UTF-8"> 
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+    <!-- Defines the compatibility of version with browser -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <!-- for make website responsive -->
+    <meta name="author" content="Mr.X"> 
+    <meta name="Linkedin profile" content="WWW.linkedin.com/Mr.X_123" > 
+    <!-- To give information about author or owner -->
+    <meta name="description " 
+    content="A better place to learn computer science">
+        <link rel='stylesheet' href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        
+        <style>
+
+.gender-control {
+    display: block;
+    width: 100%;
+    /* padding: 0.379rem 0.75rem; */
+    padding: 7px;
+    padding-left:30px;
+   
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    /* border-radius: 0.25rem; */
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.gender-control::-ms-expand {
+  background-color: transparent;
+  border: 0;
+}
+
+.gender-control:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #f8cc092a;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(204, 158, 9, 0.349);
+  
+}
+
+
+.gender-control::-webkit-input-placeholder {
+  color: #6c757d;
+  opacity: 1;
+}
+
+.gender-control::-moz-placeholder {
+  color: #6c757d;
+  opacity: 1;
+}
+
+.gender-control:-ms-input-placeholder {
+  color: #6c757d;
+  opacity: 1;
+}
+
+.gender-control::-ms-input-placeholder {
+  color: #6c757d;
+  opacity: 1;
+}
+
+.gender-control::placeholder {
+  color: #6c757d;
+  opacity: 1;
+}
+
+.input-dob{
+    width: 100%;
+    padding: 8px 10px 9px 35px;
+    height: 35px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    outline: none;
+    -webkit-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+        </style>
+        <style>
+            .input-group {
+                position: relative;
+            }
+        
+            .input-group i {
+                position: absolute;
+                left: 10px; /* Adjust the left position as needed */
+                top: 50%; /* Vertically center the icon */
+                transform: translateY(-50%);
+                font-size: 18px; /* Adjust the icon size as needed */
+            }
+        </style>
+
+    </head>
+<body>
+<div class="form_wrapper">
+    <div class="form_container">
+      <div class="title_container">
+        <h2>Registration Form</h2>
+      </div>
+      {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+      <div class="row clearfix">
+        <div class="">
+          <form method="post" >
+            {% csrf_token %}
+            
+            <div class="row clearfix">
+                <div class="col_half">
+                    <div class="input_field">
+                        <span><i aria-hidden="true" class="fa fa-flag"></i></span>
+                        
+                            {{form.primary_country }}
+                              
+                          </select>
+                      </div>
+                  
+                </div>
+                <div class="col_half">
+                  <div class="input_field"> <span><i class="fa fa-phone" style="font-size:20px"></i></span>
+                    {{ form.primary_phone }}
+                  </div>
+                   {% if form.primary_phone.errors %}
+                    <ul class="errorlist">
+                     {% for error in form.primary_phone.errors %}
+                        <li><p  style="color: red">{{error}}</p></li>
+                    {% endfor %}
+                    </ul>
+                    {% endif %} 
+                </div>
+              </div>
+
+              <div class="row clearfix">
+                <div class="col_half">
+                  <div class="input_field"> <span><i aria-hidden="true" class="fa fa-flag"></i></span>
+                    {{ form.secondary_country }}
+                  </div>
+                  {% if form.secondary_country.errors %}
+                    <ul class="errorlist">
+                     {% for error in form.secondary_country.errors %}
+                        <li><p  style="color: red">{{error}}</p></li>
+                    {% endfor %}
+                    </ul>
+                    {% endif %} 
+                </div>
+                <div class="col_half">
+                  <div class="input_field"> <span><i class="fa fa-phone" style="font-size:20px"></i></span>
+                    {{ form.secondary_phone }}
+                  </div>
+                  {% if form.secondary_phone.errors %}
+                    <ul class="errorlist">
+                     {% for error in form.secondary_phone.errors %}
+                        <li><p  style="color: red">{{error}}</p></li>
+                    {% endfor %}
+                    </ul>
+                    {% endif %} 
+                </div>
+              </div>
+
+              <div class="row clearfix">
+                <div class="col_half">
+                  <div class="input_field"> <span><i aria-hidden="true" class="fa fa-flag"></i></span>
+                    {{ form.other_country }}
+                  </div>
+                  {% if form.other_country.errors %}
+                    <ul class="errorlist">
+                     {% for error in form.other_country.errors %}
+                        <li><p  style="color: red">{{error}}</p></li>
+                    {% endfor %}
+                    </ul>
+                    {% endif %} 
+                </div>
+                <div class="col_half">
+                  <div class="input_field"> <span><i class="fa fa-phone" style="font-size:20px"></i></span>
+                    {{ form.other_phone }}
+                  </div>
+                  {% if form.other_phone.errors %}
+                    <ul class="errorlist">
+                     {% for error in form.other_phone.errors %}
+                        {% comment %} <li>{{ error }}</li> {% endcomment %}
+                        <p  style="color: red">{{error}}</p>
+                    {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+              </div>
+
+                  <div class="input_field"> <span><i class="fa fa-envelope" style="font-size:18px"></i></span>
+                    {{ form.email }}
+                  </div>
+                  {% if form.email.errors %}
+                    <ul class="errorlist">
+                     {% for error in form.email.errors %}
+                        <li><p  style="color: red">{{error}}</p></li>
+                    {% endfor %}
+                    </ul>
+                    {% endif %}
+                
+                
+                  <div class="input_field"> <span><i class="fa fa-envelope" style="font-size:18px"></i></span>
+                    {{ form.secondary_email }}
+                  </div>
+                  {% if form.secondary_email.errors %}
+                    <ul class="errorlist">
+                     {% for error in form.secondary_email.errors %}
+                        <li><p  style="color: red">{{error}}</p></li>
+                    {% endfor %}
+                    </ul>
+                    {% endif %}
+
+                    <div class="input-group date">
+                        {{ form.DOB }}
+                      </div>{{ form.DOB.errors }} <br>
+
+                  <div class="row clearfix">
+                    <div class="col_half">
+                      <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
+                        {{ form.first_name }}
+                      </div>
+                      {% if form.first_name.errors %}
+                    <ul class="errorlist">
+                     {% for error in form.first_name.errors %}
+                        <li><p  style="color: red">{{error}}</p></li>
+                    {% endfor %}
+                    </ul>
+                    {% endif %}
+                      
+                    </div>
+                    <div class="col_half">
+                      <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
+                        {{ form.middle_name }}
+                      </div>
+                      {% if form.middle_name.errors %}
+                    <ul class="errorlist">
+                     {% for error in form.middle_name.errors %}
+                        <li><p  style="color: red">{{error}}</p></li>
+                    {% endfor %}
+                    </ul>
+                    {% endif %}
+                    </div>
+                  </div>
+                  <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
+                    {{ form.last_name }}
+                  </div>
+                  {% if form.last_name.errors %}
+                  <ul class="errorlist">
+                   {% for error in form.last_name.errors %}
+                      <li><p  style="color: red">{{error}}</p></li>
+                  {% endfor %}
+                  </ul>
+                  {% endif %}
+                      <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
+                        {{ form.grand_father_name }}
+                      </div>
+                      {% if form.grand_father_name.errors %}
+                  <ul class="errorlist">
+                   {% for error in form.grand_father_name.errors %}
+                      <li><p  style="color: red">{{error}}</p></li>
+                  {% endfor %}
+                  </ul>
+                  {% endif %}
+
+                  <div class="row clearfix">
+                    <div class="col_half">
+                        <div class="input_field">
+                          <span><i aria-hidden="true" class="fa fa-intersex"></i></span>
+                            {{form.gender}}
+                         
+                        </div>
+                      </div>
+                    <div class="col_half">
+                      <div class="input_field"> <span><i aria-hidden="true" class="fa fa-tint"></i></span>
+                        {{ form.blood_group }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-group date">
+                    {{ form.marriage_date }}
+                  </div><br>
+                  <div>{{ form.marriage_date.errors }}   
+                  {% if form.marriage_date.errors %}
+                    <ul class="errorlist">
+                        <p  style="color: red">{{error}}</p>
+                    </ul>
+                    {% endif %}</div>
+            <input class="button" type="submit" value="Register" />
+          </form>
+          
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+  <script>
+    $( function() {
+      $( "#datepicker" ).datepicker();
+    } );
+    </script>
+    <script>
+        $( function() {
+          $( "#datepicker1" ).datepicker();
+        } );
+        </script>
+</body>
+  </html>

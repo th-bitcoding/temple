@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,7 +26,8 @@ SECRET_KEY = 'django-insecure-sl6^4b6!0xfi4d2kzty+4#a*x^w=h3@zq@18kkbjp&6-%n2ln(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://e3a3-2405-201-200d-a7-2f01-804f-925c-f245.ngrok-free.app','*']
+
 
 
 # Application definition
@@ -40,20 +42,38 @@ INSTALLED_APPS = [
     'rest_framework',
     'registration_temple',
     'django_crontab',
+    'crispy_forms',
+    'crispy_bootstrap5',
+    'bootstrap_datepicker_plus',
+    'corsheaders',
+    'django_countries',
+   
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware', 
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOWED_ORIGINS = [
+#     "https://2d92-2405-201-200d-a7-ef29-709c-3370-a856.ngrok-free.app",
+    
+# ]
+CSRF_TRUSTED_ORIGINS = [
+    "https://e3a3-2405-201-200d-a7-2f01-804f-925c-f245.ngrok-free.app",
+]
+# CSRF_COOKIE_DOMAIN = '.ngrok-free.app'
 ROOT_URLCONF = 'contact.urls'
-
+CSRF_COOKIE_SECURE = True
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -79,7 +99,7 @@ AUTH_USER_MODEL = 'registration_temple.Registration'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'contact',
+        'NAME': 'contact3',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': 'localhost',
@@ -87,8 +107,6 @@ DATABASES = {
     }
 }
 
-
-# Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -145,5 +163,11 @@ EMAIL_HOST_USER = 'tusharhedange269@gmail.com'
 EMAIL_HOST_PASSWORD = 'pvnldmzefchmtumm'
 
 CRONJOBS = [
-    ('*/1 * * * *', 'registration_temple.cron.my_scheduled_job')
+    ('*/1 * * * *', 'registration_temple.cron.cron_handle')
 ]
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+}
