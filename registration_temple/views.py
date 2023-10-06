@@ -80,17 +80,22 @@ class RegistationCreate(CreateView):
             form.add_error('marriage_date', 'Select Valid Date.') 
             return self.render_to_response(self.get_context_data(form=form))
         
-        if get_DOB and get_marriage_date:
+        if get_email == get_secondary_email:
+            messages.warning(self.request, "Both Email Are Same.")
+            form.add_error('secondary_email', 'Both Email Are Same.') 
+            form.add_error('email', 'Both Email Are Same.') 
+            return self.render_to_response(self.get_context_data(form=form))
+        
+        if get_DOB  and get_marriage_date !='':
     # Calculate the age difference in days
             age_difference = (get_DOB - get_marriage_date).days
-        
+
             if age_difference < 3650:  # 3650 days are roughly equivalent to 10 years
                 messages.warning(self.request, "Select a Valid Date.")
                 form.add_error('marriage_date', 'Select a Valid Date.') 
                 return self.render_to_response(self.get_context_data(form=form))
 
-        
-        
+
         if get_first_name:
             for data in get_first_name:
                 if not data.isalpha():

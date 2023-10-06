@@ -26,8 +26,8 @@ class Registration(AbstractUser,MyModel):
     username = models.CharField(
         max_length=150,
         unique=True,
-        blank=True,  # Allow an empty value for the username
-        null=True    # Allow the username to be set to None (null)
+        blank=True, 
+        null=True   
     )
     primary_country = CountryField(blank_label="select country")
     primary_phone =models.CharField(max_length=11, null=True,validators=[RegexValidator(r'^\d{10,11}$','Number must be 10 or 11 digits','invalid number')],unique=True)
@@ -43,7 +43,7 @@ class Registration(AbstractUser,MyModel):
     last_name = models.CharField(max_length=100,null=True)
     grand_father_name = models.CharField(max_length=255, null=True)
     gender = models.CharField(max_length=6,choices=gender_choices, null=True)
-    marriage_date = models.DateField(blank=True, null=True)
+    marriage_date = models.DateField(blank=True)
     blood_group = models.CharField(max_length=3, choices=blood_group_choice,null=True)
 
     def __str__(self):

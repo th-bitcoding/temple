@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-sl6^4b6!0xfi4d2kzty+4#a*x^w=h3@zq@18kkbjp&6-%n2ln(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://e3a3-2405-201-200d-a7-2f01-804f-925c-f245.ngrok-free.app','*']
+ALLOWED_HOSTS = ['https://36bd-2405-201-200d-a7-6f4a-bc09-40b-f7ba.ngrok-free.app','*']
 
 
 
@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'django_crontab',
     'crispy_forms',
     'crispy_bootstrap5',
-    'bootstrap_datepicker_plus',
     'corsheaders',
     'django_countries',
    
@@ -69,7 +68,7 @@ CORS_ALLOW_ALL_ORIGINS = True
     
 # ]
 CSRF_TRUSTED_ORIGINS = [
-    "https://e3a3-2405-201-200d-a7-2f01-804f-925c-f245.ngrok-free.app",
+    "https://36bd-2405-201-200d-a7-6f4a-bc09-40b-f7ba.ngrok-free.app",
 ]
 # CSRF_COOKIE_DOMAIN = '.ngrok-free.app'
 ROOT_URLCONF = 'contact.urls'

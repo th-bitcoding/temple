@@ -7,7 +7,20 @@ from django.utils import timezone
 import datetime
 
 class RegistrationForm(forms.ModelForm):
-    # DOB = forms.DateField(widget=forms.SelectDateWidget())
+    DOB = forms.DateField(
+        widget=forms.DateTimeInput(attrs={
+            'class': 'form-control datetimepicker-input',
+            'data-target': '#datepicker',
+            "placeholder" :"Date Of Birth"
+        })
+    )
+    marriage_date = forms.DateField(
+        widget=forms.DateTimeInput(attrs={
+            'class': 'form-control datetimepicker-input',
+            'data-target': '#datepicker2',
+            "placeholder" :"Marriage Date"
+        })
+    )
     def clean_DOB(self):
         dob = self.cleaned_data.get('DOB')
         if dob and dob > timezone.now().date():
@@ -39,9 +52,6 @@ class RegistrationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(RegistrationForm, self).__init__(*args, **kwargs)
-
-        self.fields['DOB'].widget = forms.DateInput(attrs={'class': 'input-dob', 'type': 'date',  'placeholder':"Date Of Birth"})
-        self.fields['marriage_date'].widget = forms.DateInput(attrs={'class': 'input-dob', 'type': 'date', 'placeholder':"Marriage Date"})
         self.fields['blood_group'].empty_label = None
 
 

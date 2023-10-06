@@ -377,29 +377,43 @@ body {
         opacity: 1;
    }
 }
-@media(max-width:768px) {
+@media (max-width: 768px) {
+    .input-dob {
+        height: 40px; /* Increase the height for better visibility */
+    }
+    
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        font-size: 16px; /* Adjust font size for better visibility */
+        left: 5px; /* Adjust the left position for better positioning */
+        top: 50%; /* Vertically center the icon */
+        transform: translateY(-50%);
+    }
+}
+@media (max-width: 768px) {
     .form_wrapper {
         width: 600px;
     }
 }
+
 @media (max-width: 1000px) {
     .form_wrapper .col_half {
         width: 100%;
         float: none;
-   }
+    }
     .bottom_row .col_half {
         width: 50%;
         float: left;
-   }
+    }
     .form_container .row .col_half.last {
         border-left: none;
-   }
+    }
     .remember_me {
         padding-bottom: 20px;
-   }
-   .responsive-element {
-    width: 100%; /* Set width to 100% within the media query */
-    max-width: none; /* Remove the maximum width limit */
-    height: 312px; /* Set a fixed height of 312px */
-}
+    }
+    .responsive-element {
+        width: 100%;
+        max-width: none;
+        height: 312px;
+    }
+
 }
