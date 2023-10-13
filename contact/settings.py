@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-sl6^4b6!0xfi4d2kzty+4#a*x^w=h3@zq@18kkbjp&6-%n2ln(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://36bd-2405-201-200d-a7-6f4a-bc09-40b-f7ba.ngrok-free.app','*']
+ALLOWED_HOSTS = ['https://a8a9-2405-201-200d-a7-e1c2-9866-3005-a759.ngrok-free.app','*']
 
 
 
@@ -68,7 +68,7 @@ CORS_ALLOW_ALL_ORIGINS = True
     
 # ]
 CSRF_TRUSTED_ORIGINS = [
-    "https://36bd-2405-201-200d-a7-6f4a-bc09-40b-f7ba.ngrok-free.app",
+    "https://a8a9-2405-201-200d-a7-e1c2-9866-3005-a759.ngrok-free.app",
 ]
 # CSRF_COOKIE_DOMAIN = '.ngrok-free.app'
 ROOT_URLCONF = 'contact.urls'
@@ -98,7 +98,7 @@ AUTH_USER_MODEL = 'registration_temple.Registration'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'contact3',
+        'NAME': 'contact4',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': 'localhost',

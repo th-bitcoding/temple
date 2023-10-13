@@ -16,10 +16,9 @@ class RegistrationForm(forms.ModelForm):
     )
     marriage_date = forms.DateField(
         widget=forms.DateTimeInput(attrs={
-            'class': 'form-control datetimepicker-input',
-            'data-target': '#datepicker2',
-            "placeholder" :"Marriage Date"
-        })
+            "placeholder" :"Marriage Date",
+            # 'required': 'false',
+        }), required=False
     )
     def clean_DOB(self):
         dob = self.cleaned_data.get('DOB')
@@ -54,18 +53,103 @@ class RegistrationForm(forms.ModelForm):
         super(RegistrationForm, self).__init__(*args, **kwargs)
         self.fields['blood_group'].empty_label = None
 
+class RegistrationBusiness(forms.ModelForm):
+    class Meta:
+        model = Business
+        fields = ['occupation_type','occupation','education','address_share_with','share_phone_number','address_type','address_1','address_2','address_3','country','state','district','taluka','city_or_village','zip_code']
+        widgets = {
+            'occupation_type': forms.Select(attrs={'class':'gender-control'}),
+            'occupation':forms.TextInput(attrs={"placeholder": "Occupation"}),
+            'address_type': forms.Select(attrs={'class':'gender-control'}),
+            'country':forms.Select(attrs={"class": "gender-control"}),
+            'education':forms.TextInput(attrs={"placeholder": "Education"}),
+            'address_share_with':forms.TextInput(attrs={"placeholder": "Address Share With"}),
+            'share_phone_number':forms.TextInput(attrs={"placeholder": "Share Phone Number"}),
+            'address_1':forms.TextInput(attrs={"placeholder": "Address 1"}),
+            'address_2':forms.TextInput(attrs={"placeholder": "Address 2"}),
+            'address_3':forms.TextInput(attrs={"placeholder": "Address 3"}),
+            'address_3':forms.TextInput(attrs={"placeholder": "Address 3"}),
+            'state':forms.TextInput(attrs={"placeholder": "State"}),
+            'district':forms.TextInput(attrs={"placeholder": "District"}),
+            'taluka':forms.TextInput(attrs={"placeholder": "Taluka"}),
+            'city_or_village':forms.TextInput(attrs={"placeholder": "City/Village"}),
+            'zip_code':forms.TextInput(attrs={"placeholder": "ZipCode"}),
 
-     
-    # def clean(self):
-    #     email = self.cleaned_data.get('email')
-    #     data = Registration.objects.filter(email=email).exists()
-    #     if not data:
-    #         raise forms.ValidationError("Email ALready Exist")
-    #     return data
+        }
+
+class StudentStatusForm(forms.ModelForm):
+    class Meta:
+        model = StudentStatus
+        fields = ['student_status']
+        widgets = {
+            'student_status':forms.Select(attrs={"class":"gender-control"})
+        }
+
+class StudentEducationForm(forms.ModelForm):
+    hsc_year = forms.DateField(
+        widget=forms.DateTimeInput(attrs={
+            'class': 'form-control datetimepicker-input',
+            'data-target': '#datepicker1',
+            "placeholder" :"HSC Year"
+        })
+    )
+    ssc_year = forms.DateField(
+        widget=forms.DateTimeInput(attrs={
+            'class': 'form-control datetimepicker-input',
+            'data-target': '#datepicker',
+            "placeholder" :"SSC Year",
+            # 'required': 'false',
+        })
+    )
+    class Meta:
+        model = EducationDetail
+        fields = ['standard','ssc_gr_no','hsc_gr_no','hostel','hr_no','hsc_year','ssc_year']
+        widgets = {
+            'hostel':forms.Select(attrs={"class":"gender-control"}),
+            'ssc_gr_no':forms.TextInput(attrs={'placeholder':'SSC Gr No'}),
+            'hsc_gr_no':forms.TextInput(attrs={'placeholder':'HSC Gr No'}),
+            'hr_no':forms.TextInput(attrs={'placeholder':'Hr No'}),
+            'standard':forms.TextInput(attrs={'placeholder':'Standard'}),
+        }
+
+class StudentNewForm(forms.ModelForm):
+    class Meta:
+        model = Admissionreference
+        fields=['id','Hear','refernces','category','skills','branch','member','sabha']
+        widgets = {
+            'Hear':forms.Select(attrs={"class":"gender-control"}),
+            'category':forms.Select(attrs={"class":"gender-control"}),
+            'branch':forms.Select(attrs={"class":"gender-control"}),
+            'member':forms.Select(attrs={"class":"gender-control"}),
+            'sabha':forms.Select(attrs={"class":"gender-control"}),
+            'refernces':forms.TextInput(attrs={'placeholder':'Reference'}),
+            'skills':forms.TextInput(attrs={'placeholder':'Skills'}),
+            'ssc_gr_no':forms.TextInput(attrs={'placeholder':'SSC Gr No'}),
 
 
-        # cleaned_data = self.clean()
-        # first_name = cleaned_data.get('first_name')
-        # if int in first_name:  # You create this function
-        #     self.add_error('first_name', "Insert Valid")
-        # return first_name
+        }
+
+
+class StudentRelationForm(forms.ModelForm):
+    class Meta:
+        model = Student_Relative
+        fields=['id','relations','relative_name','share_phone_number']
+        widgets = {
+            'relations':forms.Select(attrs={"class":"gender-control"}),
+            'relative_name':forms.TextInput(attrs={'placeholder':'Relative Name'}),
+            'share_phone_number':forms.TextInput(attrs={'placeholder':'Phone Number'}),
+        }
+
+class StudentDocumentForm(forms.ModelForm):
+    class Meta:
+        model = Document
+        fields = ['id','Documents','document_no','file','comment','type','is_private','deceased']
+        widgets = {
+            'Documents':forms.Select(attrs={"class":"gender-control"}),
+            'file':forms.FileInput(attrs={"class":"file-control"}),
+            'type':forms.Select(attrs={"class":"gender-control"}),
+            'is_private':forms.Select(attrs={"class":"gender-control"}),
+            'deceased':forms.Select(attrs={"class":"gender-control"}),
+            'comment':forms.TextInput(attrs={"placeholder":"Comment"})
+
+        }

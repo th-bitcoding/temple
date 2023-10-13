@@ -1,0 +1,405 @@
+{% load static %} {% load crispy_forms_tags %} <html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Defines the compatibility of version with browser -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- for make website responsive -->
+    <meta name="author" content="Mr.X">
+    <meta name="Linkedin profile" content="WWW.linkedin.com/Mr.X_123">
+    <!-- To give information about author or owner -->
+    <meta name="description " content="A better place to learn computer science">
+    <link rel='stylesheet' href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    {% comment %} <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> {% endcomment %}
+    {% comment %} <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> {% endcomment %}
+    {% comment %} <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script> {% endcomment %}
+    <!-- Option 1: Include in HTML -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <style>
+      .gender-control {
+        display: block;
+        width: 100%;
+        /* padding: 0.379rem 0.75rem; */
+        padding: 7px;
+        padding-left: 30px;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        /* border-radius: 0.25rem; */
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      }
+
+      .gender-control::-ms-expand {
+        background-color: transparent;
+        border: 0;
+      }
+
+      .gender-control:focus {
+        color: #495057;
+        background-color: #fff;
+        border-color: #f8cc092a;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(204, 158, 9, 0.349);
+      }
+
+      .gender-control::-webkit-input-placeholder {
+        color: #6c757d;
+        opacity: 1;
+      }
+
+      .gender-control::-moz-placeholder {
+        color: #6c757d;
+        opacity: 1;
+      }
+
+      .gender-control:-ms-input-placeholder {
+        color: #6c757d;
+        opacity: 1;
+      }
+
+      .gender-control::-ms-input-placeholder {
+        color: #6c757d;
+        opacity: 1;
+      }
+
+      .gender-control::placeholder {
+        color: #6c757d;
+        opacity: 1;
+      }
+
+      .input-dob {
+        width: 100%;
+        padding: 8px 10px 9px 38px;
+        height: 35px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+        outline: none;
+        transition: all 0.3s ease-in-out;
+        position: relative;
+      }
+
+      input[type="date"]::-webkit-calendar-picker-indicator {
+        position: absolute;
+        left: 1%;
+        top: 5px;
+        font-size: 20px;
+        border-right: 1px solid #ccc;
+        display: block;
+      }
+    </style>
+    <style>
+      .input-group {
+        position: relative;
+      }
+
+      .input-group i {
+        position: absolute;
+        left: 10px;
+        /* Adjust the left position as needed */
+        top: 50%;
+        /* Vertically center the icon */
+        transform: translateY(-50%);
+        font-size: 18px;
+        /* Adjust the icon size as needed */
+      }
+
+      .input-group-append {
+        cursor: pointer;
+      }
+
+      .input-group-append .input-group-text {
+        background: transparent !important;
+        border: 0 !important;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        left: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form_wrapper">
+      <div class="form_container">
+        <div class="title_container">
+          <h2>Business And Address</h2>
+        </div> {% if messages %} <ul class="messages"> {% for message in messages %} <li{% if message.tags %} style="color: green;" class="{{ message.tags }}" {% endif %}>{{ message }}</li> {% endfor %} </ul> {% endif %} <div class="row clearfix">
+          <div class="">
+            <form method="post"> {% csrf_token %} {% if form.non_field_errors %} <div class="errorlist">
+                <ul> {% for error in form.non_field_errors %} <li>
+                    <p style="color: red">{{ error }}</p>
+                  </li> {% endfor %} </ul>
+              </div> {% endif %} 
+              <div class="row clearfix">
+                <div class="col_half">
+                  <label>Occupation Type <span class="star">*</span>
+                  </label>
+                  <div class="input_field"> <span style="padding-top: 9px;"><img src="{% static 'images/icons8-briefcase-48.png' %}" height="20" width="20"></span>
+
+                    <span>
+                        <i class='fas fa-business-time' ></i>
+                    </span>
+                    {{form.occupation_type}}
+                  </div>
+                  {% if form.occupation_type.errors %} 
+                   <ul class="errorlist"> 
+                    {% for error in form.occupation_type.errors %} 
+                    <li>
+                      <p style="color: red">{{error}}</p>
+                    </li> 
+                    {% endfor %}
+                 </ul> 
+                 {% endif %}
+                </div>
+                <div class="col_half">
+                  <label>Occupation <span class="star">*</span>
+                  </label>
+                  <div class="input_field">
+                    <span style="padding-top: 9px;">
+                         <i class="bi bi-briefcase" style="font-size:18px"></i>
+                    </span>
+                    {{ form.occupation }}
+                  </div>
+                  {% if form.occupation.errors %} 
+                   <ul class="errorlist"> 
+                    {% for error in form.occupation.errors %} 
+                    <li>
+                      <p style="color: red">{{error}}</p>
+                    </li> 
+                    {% endfor %}
+                 </ul> 
+                 {% endif %}
+                </div>
+              </div>
+              <label>Education <span class="star">*</span>
+              </label>
+              <div class="input_field">
+                <span>
+                  
+                  <i class="fa fa-book" style="font-size:18px"></i>
+                </span>
+                {{ form.education }}
+              </div> {% if form.education.errors %} <ul class="errorlist"> {% for error in form.education.errors %} <li>
+                  <p style="color: red">{{error}}</p>
+                </li> {% endfor %} </ul> {% endif %} 
+                <div class="row clearfix">
+                <div class="col_half">
+                  <label>Address Share With</label>
+                  <div class="input_field">
+                    <span>
+                      <i aria-hidden="true" class="fa fa-share-alt"></i>
+                      
+                    </span>
+                    {{ form.address_share_with }}
+                  </div>
+                   {% if form.address_share_with.errors %} 
+                   <ul class="errorlist"> 
+                    {% for error in form.address_share_with.errors %} 
+                    <li>
+                      <p style="color: red">{{error}}</p>
+                    </li> 
+                    {% endfor %}
+                 </ul> 
+                 {% endif %}
+                </div>
+                <div class="col_half">
+                  <label>share_phone_number <span class="star">*</span>
+                  </label>
+                  <div class="input_field">
+                    <span>
+                      <i aria-hidden="true" class="fa fa-phone"></i>
+                    </span>
+                    {{form.share_phone_number }}
+                  </div> {% if form.share_phone_number.errors %} <ul class="errorlist"> {% for error in form.share_phone_number.errors %} <li>
+                      <p style="color: red">{{ error }}</p>
+                    </li> {% endfor %} </ul> {% endif %}
+                </div>
+              </div>
+              <div class="row clearfix">
+                <div class="col_half">
+                  <label>Address Type <span class="star">*</span>
+                  </label>
+                  <div class="input_field">
+                    <span>
+                      <i aria-hidden="true" class="fa fa-address-card-o"></i>
+                    </span>
+                    {{form.address_type}}
+                  </div>
+                  {% if form.address_type.errors %} 
+                   <ul class="errorlist"> 
+                    {% for error in form.address_type.errors %} 
+                    <li>
+                      <p style="color: red">{{error}}</p>
+                    </li> 
+                    {% endfor %}
+                 </ul> 
+                 {% endif %}
+                </div>
+                <div class="col_half">
+                  <label>Address 1 <span class="star">*</span>
+                  </label>
+                  <div class="input_field"> <span style="padding-top: 9px;"><img src="{% static 'images/icons8-address-50.png' %}" height="20" width="20"></span>
+
+                 
+                    {{ form.address_1 }}
+                  </div>
+                  {% if form.address_1.errors %} 
+                   <ul class="errorlist"> 
+                    {% for error in form.address_1.errors %} 
+                    <li>
+                      <p style="color: red">{{error}}</p>
+                    </li> 
+                    {% endfor %}
+                 </ul> 
+                 {% endif %}
+                </div>
+              </div>
+              <div class="row clearfix">
+
+                <div class="col_half">
+                <label>Address 2  </label>
+
+                <div class="input_field"> <span style="padding-top: 9px;"><img src="{% static 'images/icons8-address-50.png' %}" height="20" width="20"></span>
+
+                      {{ form.address_2 }}
+                   </div>
+                   {% if form.address_2.errors %}
+                   <ul class="errorlist">
+                      {% for error in form.address_2.errors %}
+                      <li>
+                         <p  style="color: red">{{error}}</p>
+                      </li>
+                      {% endfor %}
+                   </ul>
+                   {% endif %}
+                </div>
+                <div class="col_half">
+                    <label>Address 3 </label>
+
+                    <div class="input_field"> <span style="padding-top: 9px;"><img src="{% static 'images/icons8-address-50.png' %}" height="20" width="20"></span>
+
+                      {{ form.address_3 }}
+                   </div>
+                   {% if form.address_3.errors %}
+                   <ul class="errorlist">
+                      {% for error in form.address_3.errors %}
+                      <li>
+                         <p  style="color: red">{{error}}</p>
+                      </li>
+                      {% endfor %}
+                   </ul>
+                   {% endif %}
+                </div>
+             </div>
+             <div class="row clearfix">
+
+                <div class="col_half">
+                    <label>Country <span class="star">*</span></label>
+
+                   <div class="input_field"> <span style="padding-top: 9px;"><img src="{% static 'images/icons8-country-50.png' %}" height="20" width="20"></span>
+                      {{ form.country }}
+                   </div>
+                   {% if form.country.errors %}
+                   <ul class="errorlist">
+                      {% for error in form.country.errors %}
+                      <li>
+                         <p  style="color: red">{{error}}</p>
+                      </li>
+                      {% endfor %}
+                   </ul>
+                   {% endif %} 
+                </div>
+                <div class="col_half">
+                    <label>State<span class="star">*</span></label>
+                    <div class="input_field"> <span style="padding-top: 9px;"><img src="{% static 'images/icons8-state-50.png' %}" height="20" width="20"></span>
+                      
+                      {{form.state }}
+                     
+                   </div>
+                   {% if form.state.errors %}
+                        <ul class="errorlist">
+                            {% for error in form.state.errors %}
+                                <li><p style="color: red">{{ error }}</p></li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                </div>
+             </div>
+             <div class="row clearfix">
+                <div class="col_half">
+                  <label>District <span class="star">*</span></label>
+                  <div class="input_field"> <span style="padding-top: 9px;"><img src="{% static 'images/icons8-place-50.png' %}" height="20" width="20"></span>
+
+                    
+                    {{ form.district }}
+                  </div> {% if form.district.errors %} <ul class="errorlist"> {% for error in form.address_share_with.errors %} <li>
+                      <p style="color: red">{{error}}</p>
+                    </li> {% endfor %} </ul> {% endif %}
+                </div>
+                <div class="col_half">
+                  <label>Taluka <span class="star">*</span>
+                  </label>
+                  <div class="input_field"> <span style="padding-top: 9px;"><img src="{% static 'images/icons8-place-50.png' %}" height="20" width="20"></span>
+
+                    {{form.taluka }}
+                  </div> {% if form.taluka.errors %} <ul class="errorlist"> {% for error in form.taluka.errors %} <li>
+                      <p style="color: red">{{ error }}</p>
+                    </li> {% endfor %} </ul> {% endif %}
+                </div>
+              </div>
+              <div class="row clearfix">
+                <div class="col_half">
+                  <label>City/Village <span class="star">*</span></label>
+                  <div class="input_field"> <span style="padding-top: 9px;"><img src="{% static 'images/icons8-village-30.png' %}" height="20" width="20"></span>
+                    <span>
+                      <i aria-hidden="true" class="fas fa-city"></i>
+                    </span>
+                    {{ form.city_or_village }}
+                  </div> {% if form.city_or_village.errors %} <ul class="errorlist"> {% for error in form.city_or_village.errors %} <li>
+                      <p style="color: red">{{error}}</p>
+                    </li> {% endfor %} </ul> {% endif %}
+                </div>
+                <div class="col_half">
+                  <label>Zip Code <span class="star">*</span>
+                  </label>
+                  <div class="input_field"> <span style="padding-top: 9px;"><img src="{% static 'images/icons8-zip-code-50.png' %}" height="20" width="20"></span>
+                    
+                    {{form.zip_code }}
+                  </div> {% if form.zip_code.errors %} <ul class="errorlist"> {% for error in form.zip_code.errors %} <li>
+                      <p style="color: red">{{ error }}</p>
+                    </li> {% endfor %} </ul> {% endif %}
+                </div>
+              </div>
+              <br>
+              <input class="button" type="submit" value="Next Page" />
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{% static 'json/jquery-3.6.0.js' %}"></script>
+    <script src="{% static 'json/jquery-ui.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script>
+      $(function() {
+        $('#datepicker').datepicker();
+      });
+    </script>
+    <script>
+      $(function() {
+        $('#datepicker2').datepicker();
+      });
+    </script>
+  </body>
+</html>

@@ -4,15 +4,19 @@ from .models import *
 
 @admin.register(Registration)
 class RegistrationAdmin(admin.ModelAdmin):
-    list_display =['id','first_name','email','primary_country']
+    list_display =['id','first_name','primary_country']
 
 @admin.register(Business)
 class BusinessAdmin(admin.ModelAdmin):
-    list_display =['username','id','occupation']
+    list_display =['id','occupation']
 
-@admin.register(Admission)
+@admin.register(StudentStatus)
+class StudentStatusAdmin(admin.ModelAdmin):
+    list_display =['id','student_status']
+
+@admin.register(EducationDetail)
 class AdmissionAdmin(admin.ModelAdmin):
-    list_display =['id','username']
+    list_display =['id','hostel']
 
 @admin.register(Admissionreference)
 class referenceAdmin(admin.ModelAdmin):
@@ -22,7 +26,7 @@ class referenceAdmin(admin.ModelAdmin):
 class DocumentAdmin(admin.ModelAdmin):
     list_display =['id','Documents']
 
-@admin.register(Relation)
+@admin.register(Student_Relative)
 class RelationAdmin(admin.ModelAdmin):
     list_display =['id','relations']
 

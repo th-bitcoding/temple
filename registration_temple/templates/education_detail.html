@@ -116,12 +116,12 @@
       <div class="form_wrapper">
          <div class="form_container">
             <div class="title_container">
-               <h2>Personal Detail</h2>
+               <h2>Education Detail</h2>
             </div>
             {% if messages %}
             <ul class="messages">
                {% for message in messages %}
-               <li{% if message.tags %} style="color: red;" class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+               <li{% if message.tags %} style="color: green;" class="{{ message.tags }}"{% endif %}>{{ message }}</li>
                {% endfor %}
             </ul>
             {% endif %}
@@ -140,31 +140,32 @@
                         {% endif %}
                      <div class="row clearfix">
                         <div class="col_half">
-                            <label>Primary Country <span class="star">*</span></label>
-                           <div class="input_field">
+                            <label>Standard <span class="star">*</span></label>
+                            <div class="input_field"> <span style="padding-top: 9px;"><img src="{% static 'images/icons8-standard-50.png' %}" height="20" width="20"></span>
                             
-                              <span><i aria-hidden="true" class="fa fa-flag"></i></span>
+                             
                               
-                              {{form.primary_country }}
+                              {{form.standard }}
                              
                            </div>
-                           {% if form.primary_country.errors %}
+                           {% if form.standard.errors %}
                                 <ul class="errorlist">
-                                    {% for error in form.primary_country.errors %}
+                                    {% for error in form.standard.errors %}
                                         <li><p style="color: red">{{ error }}</p></li>
                                     {% endfor %}
                                 </ul>
                                 {% endif %}
                         </div>
                         <div class="col_half">
-                            <label>Primary Phone <span class="star">*</span></label>
+                            <label>SSC Gr No <span class="star">*</span></label>
 
-                           <div class="input_field"> <span><i class="fa fa-phone" style="font-size:20px"></i></span>
-                              {{ form.primary_phone }}
+                            <div class="input_field"> <span style="padding-top: 9px;"><img src="{% static 'images/icons8-number-50.png' %}" height="20" width="20"></span>
+
+                              {{ form.ssc_gr_no }}
                            </div>
-                           {% if form.primary_phone.errors %}
+                           {% if form.ssc_gr_no.errors %}
                            <ul class="errorlist">
-                              {% for error in form.primary_phone.errors %}
+                              {% for error in form.ssc_gr_no.errors %}
                               <li>
                                  <p  style="color: red">{{error}}</p>
                               </li>
@@ -175,14 +176,15 @@
                      </div>
                      <div class="row clearfix">
                         <div class="col_half">
-                            <label>Secondary Country</label>
+                            <label>HSC Gr No <span class="star">*</span></label>
 
-                           <div class="input_field"> <span><i aria-hidden="true" class="fa fa-flag"></i></span>
-                              {{ form.secondary_country }}
+                            <div class="input_field"> <span style="padding-top: 9px;"><img src="{% static 'images/icons8-number-50.png' %}" height="20" width="20"></span>
+
+                              {{ form.hsc_gr_no }}
                            </div>
-                           {% if form.secondary_country.errors %}
+                           {% if form.hsc_gr_no.errors %}
                            <ul class="errorlist">
-                              {% for error in form.secondary_country.errors %}
+                              {% for error in form.hsc_gr_no.errors %}
                               <li>
                                  <p  style="color: red">{{error}}</p>
                               </li>
@@ -191,14 +193,15 @@
                            {% endif %} 
                         </div>
                         <div class="col_half">
-                            <label>Secondary Phone</label>
+                            <label>hostel <span class="star">*</span></label>
 
-                           <div class="input_field"> <span><i class="fa fa-phone" style="font-size:20px"></i></span>
-                              {{ form.secondary_phone }}
+                            <div class="input_field"> <span style="padding-top: 9px;"><img src="{% static 'images/icons8-hostel-50.png' %}" height="20" width="20"></span>
+
+                              {{ form.hostel }}
                            </div>
-                           {% if form.secondary_phone.errors %}
+                           {% if form.hostel.errors %}
                            <ul class="errorlist">
-                              {% for error in form.secondary_phone.errors %}
+                              {% for error in form.hostel.errors %}
                               <li>
                                  <p  style="color: red">{{error}}</p>
                               </li>
@@ -209,14 +212,15 @@
                      </div>
                      <div class="row clearfix">
                         <div class="col_half">
-                            <label>Other Country</label>
+                            <label>Hr No</label>
 
-                           <div class="input_field"> <span><i aria-hidden="true" class="fa fa-flag"></i></span>
-                              {{ form.other_country }}
+                            <div class="input_field"> <span style="padding-top: 9px;"><img src="{% static 'images/icons8-number-50.png' %}" height="20" width="20"></span>
+
+                              {{ form.hr_no }}
                            </div>
-                           {% if form.other_country.errors %}
+                           {% if form.hr_no.errors %}
                            <ul class="errorlist">
-                              {% for error in form.other_country.errors %}
+                              {% for error in form.hr_no.errors %}
                               <li>
                                  <p  style="color: red">{{error}}</p>
                               </li>
@@ -225,14 +229,19 @@
                            {% endif %} 
                         </div>
                         <div class="col_half">
-                            <label>Other Phone</label>
+                            <label>SSC Year <span class="star">*</span></label>
 
-                           <div class="input_field"> <span><i class="fa fa-phone" style="font-size:20px"></i></span>
-                              {{ form.other_phone }}
-                           </div>
-                           {% if form.other_phone.errors %}
+                            <div class="input-group date" id="datepicker">
+                                {{ form.ssc_year }}
+                                  <span class="input-group-append">
+                                    <span class="input-group-text bg-light d-block">
+                                      <i class="fa fa-calendar"></i>
+                                    </span>
+                                  </span>
+                                </div>
+                           {% if form.ssc_year.errors %}
                            <ul class="errorlist">
-                              {% for error in form.other_phone.errors %}
+                              {% for error in form.ssc_year.errors %}
                               {% comment %} 
                               <li>{{ error }}</li>
                               {% endcomment %}
@@ -242,151 +251,33 @@
                            {% endif %}
                         </div>
                      </div>
-                     <label>Email <span class="star">*</span> </label>
-
-                     <div class="input_field"> <span><i class="fa fa-envelope" style="font-size:18px"></i></span>
-                        {{ form.email }}
-                     </div>
-                     {% if form.email.errors %}
-                     <ul class="errorlist">
-                        {% for error in form.email.errors %}
-                        <li>
-                           <p  style="color: red">{{error}}</p>
-                        </li>
-                        {% endfor %}
-                     </ul>
-                     {% endif %}
-                     <label>Secondary Email</label>
-
-                     <div class="input_field"> <span><i class="fa fa-envelope" style="font-size:18px"></i></span>
-                        {{ form.secondary_email }}
-                     </div>
-                     {% if form.secondary_email.errors %}
-                     <ul class="errorlist">
-                        {% for error in form.secondary_email.errors %}
-                        <li>
-                           <p  style="color: red">{{error}}</p>
-                        </li>
-                        {% endfor %}
-                     </ul>
-                     {% endif %}
-                     
-                     {% comment %} <div class="input-group date" type="date"  title="Date of Birth">
-                        {{ form.DOB }}
-                      </div> {% endcomment %}
-                      <label>Date Of Birth <span class="star">*</span> </label>
-
-                            <div class="input-group date" id="datepicker">
-                            {{ form.DOB }}
-                              <span class="input-group-append">
-                                <span class="input-group-text bg-light d-block">
-                                  <i class="fa fa-calendar"></i>
-                                </span>
-                              </span>
-                            </div>
-                      
-                     {{ form.DOB.errors }}
+                    
                      <div class="row clearfix">
-
                         <div class="col_half">
-                        <label>First Name <span class="star">*</span> </label>
+                            <label>HSC Year <span class="star">*</span></label>
 
-                           <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
-                              {{ form.first_name }}
-                           </div>
-                           {% if form.first_name.errors %}
+                            <div class="input-group date" id="datepicker2">
+                                {{ form.hsc_year }}
+                                  <span class="input-group-append">
+                                    <span class="input-group-text bg-light d-block">
+                                      <i class="fa fa-calendar"></i>
+                                    </span>
+                                  </span>
+                                </div>
+                           {% if form.hsc_year.errors %}
                            <ul class="errorlist">
-                              {% for error in form.first_name.errors %}
+                              {% for error in form.hsc_year.errors %}
                               <li>
                                  <p  style="color: red">{{error}}</p>
                               </li>
                               {% endfor %}
                            </ul>
-                           {% endif %}
+                           {% endif %} 
                         </div>
-                        <div class="col_half">
-                            <label>Middle Name <span class="star">*</span> </label>
-
-                           <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
-                              {{ form.middle_name }}
-                           </div>
-                           {% if form.middle_name.errors %}
-                           <ul class="errorlist">
-                              {% for error in form.middle_name.errors %}
-                              <li>
-                                 <p  style="color: red">{{error}}</p>
-                              </li>
-                              {% endfor %}
-                           </ul>
-                           {% endif %}
-                        </div>
+                        
                      </div>
-                     <label>Last Name <span class="star">*</span> </label>
 
-                     <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
-                        {{ form.last_name }}
-                     </div>
-                     {% if form.last_name.errors %}
-                     <ul class="errorlist">
-                        {% for error in form.last_name.errors %}
-                        <li>
-                           <p  style="color: red">{{error}}</p>
-                        </li>
-                        {% endfor %}
-                     </ul>
-                     {% endif %}
-                     <label>Grand Father Name <span class="star">*</span> </label>
-
-                     <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
-                        {{ form.grand_father_name }}
-                     </div>
-                     {% if form.grand_father_name.errors %}
-                     <ul class="errorlist">
-                        {% for error in form.grand_father_name.errors %}
-                        <li>
-                           <p  style="color: red">{{error}}</p>
-                        </li>
-                        {% endfor %}
-                     </ul>
-                     {% endif %}
-                     <div class="row clearfix">
-
-                        <div class="col_half">
-                        <label>Gender <span class="star">*</span> </label>
-
-                           <div class="input_field">
-                              <span><i aria-hidden="true" class="fa fa-intersex"></i></span>
-                              {{form.gender}}
-                           </div>
-                        </div>
-                        <div class="col_half">
-                            <label>Blood Group <span class="star">*</span> </label>
-
-                           <div class="input_field"> <span><i aria-hidden="true" class="fa fa-tint"></i></span>
-                              {{ form.blood_group }}
-                           </div>
-                        </div>
-                     </div>
-                     <label>Marriage Date</label>
-
-                     <div class="input-group date" id="datepicker2">
-                        {{ form.marriage_date }}
-                          <span class="input-group-append">
-                            <span class="input-group-text bg-light d-block">
-                              <i class="fa fa-calendar"></i>
-                            </span>
-                          </span>
-                        </div>
-                  
-                        {% if form.marriage_date.errors %}
-                        <ul class="errorlist">
-                           {% for error in form.marriage_date.errors %}
-                           <li>
-                              <p  style="color: red">{{error}}</p>
-                           </li>
-                           {% endfor %}
-                        </ul>
-                        {% endif %} <br>
+                  <br>
                      
                      <input class="button" type="submit" value="Continue" />
                   </form>

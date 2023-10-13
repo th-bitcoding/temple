@@ -18,7 +18,7 @@ class BusinessSerializers(serializers.ModelSerializer):
     username = serializers.SerializerMethodField()
     class Meta:
         model = Business
-        fields = ['id','occupation','occupation_type','education','address_share_with','share_phone_number','address_type','address_1','address_2','address_3','country','state','district','taluka','city_or_village','zip_code','username']
+        fields = ['id','occupation','occupation_type','education','address_share_with','share_phone_number','address_type','address_1','address_2','address_3','country','state','district','taluka','city_or_village','zip_code']
         # fields ='__all__'
         
     def get_username(self,obj):
@@ -28,7 +28,7 @@ class BusinessSerializers(serializers.ModelSerializer):
 class AdmissionSerializers(serializers.ModelSerializer):
     username = serializers.SerializerMethodField()
     class Meta:
-        model = Admission
+        model = EducationDetail
         fields = ['id','username','standard','ssc_gr_no','hostel','hr_no','hsc_year','ssc_year']
 
     def get_username(self,obj):
@@ -48,7 +48,7 @@ class AdmissionreferenceSerializers(serializers.ModelSerializer):
 class RelationSerializers(serializers.ModelSerializer):
     username = serializers.SerializerMethodField()
     class Meta:
-        model = Relation
+        model = Student_Relative
         fields = ['id','username','relations','relative_name','share_phone_number']
 
     def get_username(self,obj):

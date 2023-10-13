@@ -3,7 +3,7 @@ import random
 import string
 from django.forms.models import BaseModelForm
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import *
@@ -20,21 +20,36 @@ from django.contrib import messages
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.permissions import AllowAny
-
+from django.views.generic import View
+from django.http import FileResponse
+from reportlab.pdfgen import canvas
+import io
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
 
 def index(request):
-    return render(request,'registration.html')
+
+    return HttpResponse("Thank You")
+
+def try1(request,):
+    print('4545',request.GET.get('email'))
+    data = Registration.objects.get(email=request.GET.get('email'))
+    main_data = {
+        "data":data
+    }
+    return render(request,'xyz.html',main_data)
+
 
 class RegistationCreate(CreateView):
     permission_classes = (AllowAny,)
     model = Registration
     form_class = RegistrationForm
     template_name = 'registration.html'
-    success_url =reverse_lazy('registration:registrationclass')
+    # success_url =reverse_lazy(f'registration:try')
 
     def form_valid(self, form):
-        today_date = datetime.date.today()
-        get_primary_phone = form.cleaned_data['primary_phone']
+
         get_secondary_country = form.cleaned_data['secondary_country']
         get_secondary_phone = form.cleaned_data['secondary_phone']
         get_other_country = form.cleaned_data['other_country']
@@ -51,7 +66,15 @@ class RegistationCreate(CreateView):
         get_secondary_email = form.cleaned_data['secondary_email']
 
         check_email = Registration.objects.filter(email=get_email).exists()
-        check_secondary_email = Registration.objects.filter(email=get_secondary_email).exists()
+        if get_secondary_email =='':
+            pass
+        else:
+            check_secondary_email = Registration.objects.filter(secondary_email=get_secondary_email)
+
+            if check_secondary_email.exists():
+                messages.warning(self.request, "Seconday Email already exists.")
+                form.add_error('secondary_email', 'Secondary Email already exists.') 
+                return self.render_to_response(self.get_context_data(form=form))
 
         if get_secondary_country and not get_secondary_phone:
             messages.warning(self.request, "Enter Secondary Phone Number")
@@ -75,10 +98,10 @@ class RegistationCreate(CreateView):
             return self.render_to_response(self.get_context_data(form=form))
 
 
-        if get_marriage_date == today_date:
-            messages.warning(self.request, "select Valid Date.")
-            form.add_error('marriage_date', 'Select Valid Date.') 
-            return self.render_to_response(self.get_context_data(form=form))
+        # if get_marriage_date == today_date:
+        #     messages.warning(self.request, "select Valid Date.")
+        #     form.add_error('marriage_date', 'Select Valid Date.') 
+        #     return self.render_to_response(self.get_context_data(form=form))
         
         if get_email == get_secondary_email:
             messages.warning(self.request, "Both Email Are Same.")
@@ -86,11 +109,16 @@ class RegistationCreate(CreateView):
             form.add_error('email', 'Both Email Are Same.') 
             return self.render_to_response(self.get_context_data(form=form))
         
-        if get_DOB  and get_marriage_date !='':
-    # Calculate the age difference in days
-            age_difference = (get_DOB - get_marriage_date).days
-
-            if age_difference < 3650:  # 3650 days are roughly equivalent to 10 years
+        # if get_primary_country =='' or get_primary_phone =='':
+        #     messages.warning(self.request, "Both Email Are Same.")
+        #     form.add_error('primary_country', 'Both Email Are Same.') 
+        #     form.add_error('primary_phone', 'Both Email Are Same.') 
+        #     return self.render_to_response(self.get_context_data(form=form))
+        
+        if get_DOB is not None and get_marriage_date is not None:
+   
+            age_difference = (get_marriage_date - get_DOB).days
+            if age_difference < 3650: 
                 messages.warning(self.request, "Select a Valid Date.")
                 form.add_error('marriage_date', 'Select a Valid Date.') 
                 return self.render_to_response(self.get_context_data(form=form))
@@ -129,16 +157,166 @@ class RegistationCreate(CreateView):
             messages.warning(self.request, "Email already exists.")
             form.add_error('email', 'Email already exists.') 
             return self.render_to_response(self.get_context_data(form=form))
-        
-        if check_secondary_email:
-            messages.warning(self.request, "Email already exists.")
-            form.add_error('secondary_email', 'Email already exists.') 
-            return self.render_to_response(self.get_context_data(form=form))
-        
+
+        form.save()
+        success_url = reverse_lazy('registration:registrationbusiness/') + f'?email={get_email}'
         messages.success(self.request, "Data has been successfully inserted.")
-        return super().form_valid(form)
+        return HttpResponseRedirect(success_url)
+    
+class RegistrationBusiness(CreateView):
+    permisson_classes = (AllowAny,)
+    model = Business
+    form_class = RegistrationBusiness
+    template_name = 'registration_business.html'
+
+    def form_valid(self, form):
+        email = self.request.GET.get('email')
+        try:
+            student_email = Registration.objects.get(email=email)
+
+            form.instance.registration = student_email
+            form.save()
+
+            success_url = reverse_lazy('registration:registrationstudentstatus') + f'?email={email}'
+            messages.success(self.request, "Data has been successfully inserted.")
+            return HttpResponseRedirect(success_url)
+
+        except Registration.DoesNotExist:
+           
+            raise ValueError("No Registration found with the provided email.")
+  
+class StudentStatusDetail(CreateView):
+    permisson_classes = (AllowAny,)
+    model = StudentStatus
+    form_class = StudentStatusForm
+    template_name = "student_status.html"
+
+    def form_valid(self,form):
+        email = self.request.GET.get('email')
+        
+        try:
+            student_email = Registration.objects.get(email=email)
+            print('student_email',student_email)
+            form.instance.student = student_email
+            form.save()
+            check_status = StudentStatus.objects.get(student = student_email)
+            if check_status.student_status == "Yes":
+                success_url = reverse_lazy('registration:studenteducation') + f'?email={email}'
+            else:
+                success_url = reverse_lazy('registration:studentenew') + f'?email={email}'
+            messages.success(self.request, "Data has been successfully inserted.")
+            return HttpResponseRedirect(success_url)
+        except Registration.DoesNotExist:
+
+            raise ValueError("No Registration found with the provided email.")
+        
+class StudentEducationDetail(CreateView):
+    permission_classes = (AllowAny,)
+    model = EducationDetail
+    form_class = StudentEducationForm
+    template_name = "education_detail.html"
+
+    def form_valid(self,form):
+        email = self.request.GET.get('email')
+        print('email44',email)
+        try:
+            student_email = Registration.objects.get(email=email)
+            form.instance.student = student_email
+            form.save()
+            success_url = reverse_lazy('registration:studentrelative') + f'?email={email}'
+            messages.success(self.request, "Data has been successfully inserted.")
+            return HttpResponseRedirect(success_url)
+        except Registration.DoesNotExist:
+            raise ValueError("No Registration found with provided email")
+        
+class StudentNew(CreateView):
+    permission_classes = (AllowAny,)
+    model = Admissionreference
+    form_class = StudentNewForm
+    template_name = "studentnew.html"
+
+    def form_valid(self,form):
+        email = self.request.GET.get('email')
+        try:
+            student_email =Registration.objects.get(email=email)
+            form.instance.student =student_email
+            form.save()
+            success_url = reverse_lazy('registration:studentrelative') + f'?email={email}'
+            return HttpResponseRedirect(success_url)
+        except Registration.DoesNotExist:
+            raise ValueError("No registration found with provided email")
+        
+class StudentRelative(CreateView):
+    permission_classes=(AllowAny,)
+    model = Student_Relative
+    form_class = StudentRelationForm
+    template_name="student_relative.html"
+
+    def form_valid(self,form):
+        email = self.request.GET.get('email')
+        try:
+            student_email = Registration.objects.get(email=email)
+            form.instance.student = student_email
+            form.save()
+            success_url = reverse_lazy('registration:studentdocument') + f'?email={email}'
+
+            return HttpResponseRedirect(success_url)
+        except Registration.DoesNotExist:
+            raise ValueError("No registration found with provided email")
+        
+class StudentDocument(CreateView):
+    permission_classes = (AllowAny,)
+    model = Document
+    form_class = StudentDocumentForm
+    template_name = "student_documents.html"
+
+    def form_valid(self,form):
+        email = self.request.GET.get('email')
+        print('email',email)
+        try:
+            student_email=Registration.objects.get(email=email)
+            form.instance.studentdocument = student_email
+            form.save()
+            success_url = reverse_lazy('registration:index')
+
+            return HttpResponseRedirect(success_url)
+        except Registration.DoesNotExist:
+            raise ValueError("No Registration FOund With Provided email")
+
+def some_view(request):
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=letter)
+
+    # Query the Registration object
+    data = Registration.objects.get(id=2)
 
 
+    table_data = [
+        ['First Name','middle_name' 'Last Name','primary_country','primary_phone'],
+        [data.first_name, data.middle_name,data.last_name],
+    ]
+
+    table = Table(table_data)
+
+    style = TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black),
+    ])
+
+    table.setStyle(style)
+
+    elements = []
+    elements.append(table)
+    doc.build(elements)
+
+    buffer.seek(0)
+    return FileResponse(buffer, as_attachment=True, filename="hello.pdf")
+    
 def username_check(request):
     username = request.data.get('username')
     check_data = Registration.objects.get(username=username)
